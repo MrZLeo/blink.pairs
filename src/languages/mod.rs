@@ -114,7 +114,7 @@ macro_rules! define_token_enum {
             $(#[token($line_comment)])*
             LineComment,
 
-            $(#[token($block_comment_open, |_| $crate::languages::SStr($block_comment_open) )])*
+            $(#[token($block_comment_open, |_| $crate::languages::SStr($block_comment_close) )])*
             BlockCommentOpen($crate::languages::SStr),
             $(#[token($block_comment_close, |_| $crate::languages::SStr($block_comment_close) )])*
             BlockCommentClose($crate::languages::SStr),
