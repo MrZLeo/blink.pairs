@@ -8,6 +8,6 @@ define_token_enum!(CToken, {
     },
     line_comment: ["//"],
     block_comment: ["/*" => "*/"],
-    string_regex: ["(?&dstring)", "(?&schar)"],
+    string: ["\"", "'"],
     block_string: []
 });
