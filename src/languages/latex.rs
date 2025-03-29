@@ -10,7 +10,7 @@ define_token_enum!(LatexToken, {
     block_comment: [],
     string_regex: ["(?&dstring)", "(?&schar)"],
     block_string: [
-        symmetric "\\$",
-        symmetric "\\$\\$"
+        symmetric "$",
+        symmetric "$$"
     ]
 });
