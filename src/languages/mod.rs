@@ -73,6 +73,7 @@ pub enum Token {
         closing: &'static str,
     },
     DelimiterClose(&'static str),
+    DelimiterSymmetric(&'static str),
     LineComment,
     BlockCommentOpen(&'static str),
     BlockCommentClose(&'static str),
@@ -89,7 +90,10 @@ struct SStr(&'static str);
 #[macro_export]
 macro_rules! define_token_enum {
     ($name:ident, {
-        delimiters: { $($open:literal => $close:literal),* $(,)? },
+        delimiters: {
+            $($open:literal => $close:literal),* $(,)?
+            $(symmetric $symmetric:literal),* $(,)?
+        },
         line_comment: [ $($line_comment:literal),* $(,)? ],
         block_comment: [ $($block_comment_open:literal => $block_comment_close:literal),* $(,)? ],
         string_regex: [ $($string_regex:literal),* $(,)? ],
@@ -110,6 +114,9 @@ macro_rules! define_token_enum {
 
             $(#[token($close, |_| $crate::languages::SStr($close) )])*
             DelimiterClose($crate::languages::SStr),
+
+            $(#[token($symmetric, |_| $crate::languages::SStr($symmetric) )])*
+            DelimiterSymmetric($crate::languages::SStr),
 
             $(#[token($line_comment)])*
             LineComment,
@@ -139,6 +146,7 @@ macro_rules! define_token_enum {
                 match value {
                     $name::DelimiterOpen((text, closing)) => Self::DelimiterOpen { text: text.0, closing: closing.0 },
                     $name::DelimiterClose(s) => Self::DelimiterClose(s.0),
+                    $name::DelimiterSymmetric(s) => Self::DelimiterSymmetric(s.0),
                     $name::LineComment => Self::LineComment,
                     $name::BlockCommentOpen(closing) => Self::BlockCommentOpen(closing.0),
                     $name::BlockCommentClose(close) => Self::BlockCommentClose(close.0),

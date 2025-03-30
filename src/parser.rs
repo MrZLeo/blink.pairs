@@ -124,6 +124,15 @@ where
                     };
                     current_line_matches.push(_match);
                 }
+                (Normal, DelimiterSymmetric(text), false) => {
+                    let _match = Match {
+                        text,
+                        col: lexer.span().start,
+                        closing: Some(text),
+                        stack_height: stack.len(),
+                    };
+                    current_line_matches.push(_match);
+                }
 
                 // Stop parsing rest of line
                 (Normal, LineComment, false) => break,
