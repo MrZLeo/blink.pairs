@@ -92,7 +92,7 @@ macro_rules! define_token_enum {
     ($name:ident, {
         delimiters: {
             $($open:literal => $close:literal),* $(,)?
-            $(symmetric $symmetric:literal),* $(,)?
+            $(symmetric $symmetric:literal $(priority = $priority:literal)?),* $(,)?
         },
         line_comment: [ $($line_comment:literal),* $(,)? ],
         block_comment: [ $($block_comment_open:literal => $block_comment_close:literal),* $(,)? ],
@@ -115,7 +115,7 @@ macro_rules! define_token_enum {
             $(#[token($close, |_| $crate::languages::SStr($close) )])*
             DelimiterClose($crate::languages::SStr),
 
-            $(#[token($symmetric, |_| $crate::languages::SStr($symmetric) )])*
+            $(#[token($symmetric, |_| $crate::languages::SStr($symmetric) $(, priority = $priority)? )])*
             DelimiterSymmetric($crate::languages::SStr),
 
             $(#[token($line_comment)])*
