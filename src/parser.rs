@@ -125,14 +125,36 @@ where
                     current_line_matches.push(_match);
                 }
                 (Normal, DelimiterSymmetric(text), false) => {
-                    let _match = Match {
-                        text,
-                        col: lexer.span().start,
-                        closing: Some(text),
-                        stack_height: stack.len(),
-                    };
-                    stack.push(text);
-                    current_line_matches.push(_match);
+                    if let Some(closing) = stack.last() {
+                        if text == *closing {
+                            stack.pop();
+                            let _match = Match {
+                                text,
+                                col: lexer.span().start,
+                                closing: None,
+                                stack_height: stack.len(),
+                            };
+                            current_line_matches.push(_match);
+                        } else {
+                            let _match = Match {
+                                text,
+                                col: lexer.span().start,
+                                closing: Some(text),
+                                stack_height: stack.len(),
+                            };
+                            stack.push(text);
+                            current_line_matches.push(_match);
+                        }
+                    } else {
+                        let _match = Match {
+                            text,
+                            col: lexer.span().start,
+                            closing: Some(text),
+                            stack_height: stack.len(),
+                        };
+                        stack.push(text);
+                        current_line_matches.push(_match);
+                    }
                 }
 
                 // Stop parsing rest of line
