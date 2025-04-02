@@ -131,6 +131,7 @@ where
                         closing: Some(text),
                         stack_height: stack.len(),
                     };
+                    stack.push(text);
                     current_line_matches.push(_match);
                 }
 
